@@ -1,39 +1,35 @@
 #!/bin/sh
 
-packages=""
+packages="vim screen python-setuptools python-virtualenv build-essential npm curl git python-dev libevent-dev";
+new_packages="";
 
-if [ ! `which vim` ]; then
-    packages="$packages vim";
+for p in $packages; do
+    dpkg -l $p > /dev/null 2>&1;
+
+    if [ $? != 0 ]; then
+        new_packages="$new_packages $p"
+    fi;
+
+done;
+
+if [ -n "$new_packages" ]; then
+    apt-get update;
+    apt-get install -y $new_packages;
 fi;
 
-if [ ! `which screen` ]; then
-    packages="$packages screen";
-fi;
-
-if [ ! `which easy_install` ]; then
-    packages="$packages python-setuptools";
-fi;
-
-if [ ! `which virtualenv` ]; then
-    packages="$packages python-virtualenv";
-fi;
-
-if [ ! `which virtualenv` ]; then
-    packages="$packages python-virtualenv";
-fi;
-
+# COMPASS
 if [ ! `which compass` ]; then
     gem update --system &&
     gem install compass;
 fi;
 
-if [ ! `which make` ]; then
-    packages="$packages build-essential";
+# ADDING SOME ENV VAR
+export_string="export PATH=/vagrant:/vagrant/provisioner:/vagrant/provisioner/send-git-keys-script:\$PATH"
+grep "$export_string" ~vagrant/.bashrc;
+if [ $? != 0 ]; then
+    echo ${export_string} >> ~vagrant/.bashrc;
 fi;
 
-if [ -n "$packages" ]; then
-    apt-get update;
-    apt-get install -y $packages;
-fi;
 
+# PUTTING THIS FUCKING SHIT IN PT_BR
 locale-gen pt_BR.utf8;
