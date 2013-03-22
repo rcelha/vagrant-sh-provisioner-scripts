@@ -1,12 +1,11 @@
 #!/bin/sh
 
-packages="vim screen python-setuptools python-virtualenv build-essential npm curl git python-dev libevent-dev";
+packages="vim screen python-setuptools python-virtualenv build-essential npm curl git python-dev libevent-dev unzip rabbitmq-server";
 new_packages="";
 
 for p in $packages; do
-    dpkg -l $p > /dev/null 2>&1;
-
-    if [ $? != 0 ]; then
+    aptitude show $p | grep State | cut -d: -f2 | grep not;
+    if [ ${?} -eq 0 ]; then
         new_packages="$new_packages $p"
     fi;
 
@@ -20,7 +19,8 @@ fi;
 # COMPASS
 if [ ! `which compass` ]; then
     gem update --system &&
-    gem install compass;
+    gem install sass --version 3.1.1
+    gem install compass --version 0.11.1;
 fi;
 
 # ADDING SOME ENV VAR
