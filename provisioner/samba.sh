@@ -11,3 +11,5 @@ vagrant
     cp /vagrant/provisioner/smb.conf /etc/samba/;
     service smbd restart;
 fi;
+
+exit 0;

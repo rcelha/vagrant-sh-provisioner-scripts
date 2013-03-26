@@ -33,3 +33,5 @@ fi;
 
 # PUTTING THIS FUCKING SHIT IN PT_BR
 locale-gen pt_BR.utf8;
+
+exit 0;

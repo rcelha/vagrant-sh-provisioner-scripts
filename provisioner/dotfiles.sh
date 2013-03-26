@@ -9,3 +9,5 @@ cd dotfiles &&
 ./install.py;" vagrant;
 
 fi;
+
+exit 0;
