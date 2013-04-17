@@ -35,3 +35,6 @@ fi;
 locale-gen pt_BR.utf8;
 
 exit 0;
+
+# TODO 
+#   https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
