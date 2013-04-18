@@ -12,8 +12,9 @@ Vagrant::Config.run do |config|
     
     #networking
     config.vm.network :hostonly, "192.168.56.100"
-    # config.vm.forward_port 80, 8080
+    # config.vm.forward_port guest, host
     config.vm.forward_port 8000, 8000
+    config.vm.forward_port 80, 8080
 
     # basic tools
     config.vm.provision :shell, :path => "provisioner/base.sh"
