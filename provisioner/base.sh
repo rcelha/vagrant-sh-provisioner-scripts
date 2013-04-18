@@ -1,6 +1,6 @@
 #!/bin/sh
 
-packages="vim screen python-setuptools python-virtualenv build-essential npm curl git python-dev libevent-dev unzip rabbitmq-server";
+packages="apache2 vim screen python-setuptools python-virtualenv build-essential npm curl git python-dev libevent-dev unzip rabbitmq-server";
 new_packages="";
 
 for p in $packages; do
