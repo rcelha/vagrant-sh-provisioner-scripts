@@ -22,8 +22,11 @@ Vagrant::Config.run do |config|
 
     # github key
     config.vm.provision :shell do |s|
-        s.path = "provisioner/github-key.sh"
-        s.args = "'" + File.read(File.join(ENV["HOME"], ".ssh", "github_rsa")) + "'"
+        begin
+            s.path = "provisioner/github-key.sh"
+            s.args = "'" + File.read(File.join(ENV["HOME"], ".ssh", "github_rsa")) + "'"
+        rescue
+        end
     end
 
     # some github projects
