@@ -1,3 +1,6 @@
+#!/bin/sh
+
+CONF="
 [global]
 
     workgroup = MYGROUP
@@ -14,3 +17,18 @@
     valid users = %S
     valid users = MYDOMAIN\%S
     valid users = %G\%S
+";
+
+if [ ! `which smbd` ]; then
+
+    apt-get update;
+    apt-get install -y samba;
+echo "vagrant
+vagrant
+" | smbpasswd -s vagrant;
+
+    echo "${CONF}" > /etc/samba/smb.conf;
+    service smbd restart;
+fi;
+
+exit 0;

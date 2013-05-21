@@ -1,6 +1,12 @@
 #!/bin/sh
 
 KEY="${1}";
+
+if [ ! $KEY ]; then
+    echo "CANNOT SETUP A THE GITHUB KEY";
+    exit 1;
+fi;
+
 KEY_NAME=github_rsa;
 KEY_PATH=/home/vagrant/.ssh;
 KEY_FILE=${KEY_PATH}/${KEY_NAME};
