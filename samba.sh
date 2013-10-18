@@ -23,12 +23,12 @@ if [ ! `which smbd` ]; then
 
     apt-get update;
     apt-get install -y samba;
+fi;
+
 echo "vagrant
 vagrant
 " | smbpasswd -s vagrant;
-
-    echo "${CONF}" > /etc/samba/smb.conf;
-    service smbd restart;
-fi;
+echo "${CONF}" > /etc/samba/smb.conf;
+service smbd restart;
 
 exit 0;
