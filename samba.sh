@@ -25,6 +25,7 @@ if [ ! `which smbd` ]; then
     apt-get install -y samba;
 fi;
 
+smbpasswd -a -n vagrant;
 echo "vagrant
 vagrant
 " | smbpasswd -s vagrant;
