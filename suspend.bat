@@ -1,2 +1,0 @@
-vagrant suspend
-pause
