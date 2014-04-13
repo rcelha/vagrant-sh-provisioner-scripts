@@ -1,8 +1,11 @@
 #!/bin/sh
 
+. /tmp/provisioner-base.sh;
+print_debug import-github-key-from-windows.sh
+
 KEY="${1}";
 
-if [ ! $KEY ]; then
+if [ -z "$KEY" ]; then
     echo "CANNOT SETUP A THE GITHUB KEY";
     exit 1;
 fi;
@@ -13,8 +16,9 @@ KEY_FILE=${KEY_PATH}/${KEY_NAME};
 KEY_HOST=github.com
 KEY_USER=git
 
-if [ ! -f ${KEY_FILE} ]; then
-
+if [ -f ${KEY_FILE} ]; then
+    echo "GITHUB KEY ALREADY SETUPED"
+else
     echo "${KEY}" > ${KEY_FILE};
 
     chown vagrant ${KEY_FILE};

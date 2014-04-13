@@ -1,5 +1,8 @@
 #!/bin/sh
 
+. /tmp/provisioner-base.sh;
+print_debug configure-samba.sh
+
 CONF="
 [global]
 
@@ -8,7 +11,6 @@ CONF="
 
     security = user
     passdb backend = tdbsam
-
 
 [homes]
     comment = Home Directories
@@ -19,17 +21,14 @@ CONF="
     valid users = %G\%S
 ";
 
-if [ ! `which smbd` ]; then
-
-    apt-get update;
-    apt-get install -y samba;
-fi;
-
 smbpasswd -a -n vagrant;
 echo "vagrant
 vagrant
 " | smbpasswd -s vagrant;
 echo "${CONF}" > /etc/samba/smb.conf;
-service smbd restart;
+
+# redhat || debian
+add_service_boot smb || add_service_boot smbd;
+restart_service smb || restart_service smbd;
 
 exit 0;
