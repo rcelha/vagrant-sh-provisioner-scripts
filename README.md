@@ -12,41 +12,45 @@ Vagrant::Config.run do |config|
     config.vm.box = "precise32"
     config.vm.box_url = "http://files.vagrantup.com/precise32.box"
 
-    config.vm.customize [
-        "modifyvm", :id, 
-        "--cpus", "2",
-        "--memory", "512"]
-    
     #networking
     config.vm.network :hostonly, "192.168.56.100"
 
-    # config.vm.forward_port guest, host
-    config.vm.forward_port 8000, 8000
-    config.vm.forward_port 80, 8080
+    config.vm.provision :shell, :path => "provisioner-base.sh"
 
-    config.vm.provision :shell, :path => "base.sh"
-
-    # adding some new repos
-    config.vm.provision :shell, :path => "ubuntu-repo-manager.sh", :args => "ppa:chris-lea/node.js"
-
-    # Installing packages through the package manager
     config.vm.provision :shell do |s|
-        s.path = "apt-install.sh"
-        s.args = "apache2 vim screen python-setuptools python-virtualenv build-essential curl git python-dev libevent-dev unzip rabbitmq-server nodejs"
+        s.path = "install-package.sh"
+        s.args = "python-software-properties python g++ make"
     end
 
-    config.vm.provision :shell, :path => "samba.sh"
+    config.vm.provision :shell do |s|
+        s.path = "add-repository.sh"
+        s.args = "chris-lea/node.js"
+    end
+
+    config.vm.provision :shell do |s|
+        s.path = "install-package.sh"
+        s.args = "python python-dev gcc make samba ruby rubygems git"
+    end
+
+    config.vm.provision :shell, :path => "install-compass-from-gem.sh"
+
+    config.vm.provision "shell", inline: ". /tmp/provisioner-base.sh && copy_files bin/* /usr/local/bin/"
+    config.vm.provision "shell", inline: ". /tmp/provisioner-base.sh && copy_files example-rc/.bash_aliases ~vagrant/"
+    config.vm.provision "shell", inline: ". /tmp/provisioner-base.sh && append_to_file 'alias l=\"ls -lh\"' ~vagrant/.bash_aliases"
+
+    config.vm.provision :shell, :path => "configure-samba.sh"
+
 
     # github key
     config.vm.provision :shell do |s|
         begin
-            s.path = "github-key.sh"
+            s.path = "import-github-key-from-windows.sh"
             s.args = "'" + File.read(File.join(ENV["HOME"], ".ssh", "github_rsa")) + "'"
         rescue
         end
     end
 
-    # some github projects
-    config.vm.provision :shell, :path => "dotfiles.sh"
+
+end
 end
 ``` 
