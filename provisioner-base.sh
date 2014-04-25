@@ -27,15 +27,8 @@ restart_service () {
     service_name=$1;
     ret=0;
 
-    if [ `get_distro` = "debian" ]; then
-        echo "TODO"
-        service $service_name restart;
-        ret=$?;
-    else
-        echo "TODO: TEST"
-        chkconfig $service_name on;
-        ret=$?;
-    fi;
+    service $service_name restart;  
+    ret=$?;
 
     return $ret;
 }
@@ -48,7 +41,6 @@ stop_service () {
         echo "TODO"
         ret=$?;
     else
-        echo "TODO: TEST"
         chkconfig $service_name off;
         ret=$?;
     fi;
@@ -63,7 +55,6 @@ add_service_boot () {
         update-rc.d $service_name defaults
         ret=$?;
     else
-        echo "TODO: TEST"
         chkconfig $service_name --add;
         ret=$?;
     fi;
@@ -73,9 +64,16 @@ add_service_boot () {
 copy_files () {
     orig_name=$1;
     dest_path=$2;
+    dos_2_unix=$3;
 
     mkdir -p $2;
-    cp -rf /vagrant/$1 $2;
+    new_files=$(cp  -rfv /vagrant/$1 $2 | cut -d \> -f 2 | cut -d \` -f 2 | cut -d \' -f 1);
+
+    if [[ $3 ]]; then
+        for i in $new_files; do
+            dos2unix $i;
+        done;
+    fi;
 }
 
 append_to_file () {
@@ -83,8 +81,10 @@ append_to_file () {
     target=$2;
 
     grep "$1" $2;
+    echo grep "$1" $2;
+
     if [ $? != 0 ]; then
-        echo ${1} >> $2;
+        echo "${1}" >> $2;
     fi;
 }
 
@@ -94,7 +94,3 @@ print_debug () {
     echo "##############################################"
 
 }
-
-
-# TODO: remove hardcoded '/vagrant'
-cp -f /vagrant/provisioner-base.sh /tmp/provisioner-base.sh;

@@ -15,7 +15,7 @@ Vagrant::Config.run do |config|
     #networking
     config.vm.network :hostonly, "192.168.56.100"
 
-    config.vm.provision :shell, :path => "provisioner-base.sh"
+    config.vm.provision "file", source: "provisioner-base.sh", destination: "/tmp/provisioner-base.sh"
 
     config.vm.provision :shell do |s|
         s.path = "install-package.sh"

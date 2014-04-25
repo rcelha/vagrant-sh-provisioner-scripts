@@ -21,7 +21,7 @@ install_package_debian () {
 }
 
 install_package_rhel () {
-    echo "TODO";
+    yum install -y $@;
 }
 
 func=`get_func install_package`;
